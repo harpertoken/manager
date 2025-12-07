@@ -31,10 +31,7 @@ def main():
     )
     parser.add_argument("--model", default="grok-beta", help="Model name")
     parser.add_argument(
-        "--message",
-        action="append",
-        required=True,
-        help="User message (can be used multiple times)",
+        "--message", action="append", help="User message (can be used multiple times)"
     )
     parser.add_argument("--system-message", help="System message")
     parser.add_argument(
@@ -57,6 +54,8 @@ def main():
     if args.setup_hooks:
         setup_hooks()
     else:
+        if not args.message:
+            parser.error("--message is required unless --setup-hooks is used")
         m = Manager()
         messages = []
         if args.system_message:
