@@ -1,0 +1,53 @@
+# SPDX-License-Identifier: MIT
+---
+name: manager
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-ubuntu:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, '3.10', '3.11', '3.12', '3.13', '3.14']
+    steps:
+
+  test-macos:
+    runs-on: macos-latest
+    needs: test-ubuntu
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, '3.10', '3.11', '3.12', '3.13', '3.14']
+    steps:
+
+  test-windows:
+    runs-on: windows-latest
+    needs: test-macos
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, '3.10', '3.11', '3.12', '3.13', '3.14']
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e .[test]
+        pip install pre-commit pytest-cov
+    - name: Run pre-commit
+      run: |
+        pre-commit run --all-files
+    - name: Run tests
+      run: |
+        pytest --cov=manager --cov-report=xml tests/
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        file: ./coverage.xml

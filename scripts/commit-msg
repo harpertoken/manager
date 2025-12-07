@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# SPDX-License-Identifier: MIT
+
+# Conventional commit message hook
+# Enforces: lowercase first line, ≤40 chars, starts with type: like feat:, fix:, etc.
+
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(head -1 "$COMMIT_MSG_FILE")
+
+# Check if first line is lowercase
+if [[ "$COMMIT_MSG" =~ [A-Z] ]]; then
+    echo "Error: Commit message first line must be lowercase."
+    exit 1
+fi
+
+# Check length ≤40 chars
+if [ ${#COMMIT_MSG} -gt 40 ]; then
+    echo "Error: Commit message first line must be ≤40 characters."
+    exit 1
+fi
+
+# Check starts with type:
+if ! [[ "$COMMIT_MSG" =~ ^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert): ]]; then
+    echo "Error: Commit message must start with a type like feat:, fix:, etc."
+    exit 1
+fi
+
+echo "Commit message is valid."
