@@ -1,16 +1,31 @@
-manager/__init__.py:26
+manager/__init__.py:45
 
 ```python
-def render_chat_with_tools(self, model, messages, tools):
+def render_chat_with_tools(self, model, messages, tools, template_name="chatwithtools.jinja", **kwargs):
+    """Render a JSON payload for xAI API chat completions with tools.
+
+    Args:
+        model (str): The model name (e.g., "grok-beta").
+        messages (list): List of message dicts with 'role' and 'content'.
+        tools (list): List of tool dicts with 'type' and 'name'.
+        template_name (str): Name of the Jinja2 template to use.
+        **kwargs: Additional parameters to pass to the template (e.g., temperature, max_tokens).
+
+    Returns:
+        str: The rendered JSON payload.
+
+    Raises:
+        ValueError: If inputs do not meet validation requirements.
+    """
     self._validate_messages(messages)
     self._validate_tools(tools)
     if not isinstance(model, str):
         raise ValueError("Model must be a string")
-    template = self.env.get_template("chatwithtools.jinja")
-    return template.render(model=model, messages=messages, tools=tools)
+    template = self.env.get_template(template_name)
+    return template.render(model=model, messages=messages, tools=tools, **kwargs)
 ```
 
-`manager` is a Python library and CLI tool for generating robust, structured templates for **xAI API agentic tool calls**. It uses Jinja2 to produce well-formed payloads that integrate messages, tools, and model configurations.
+`manager` is a Python library and CLI tool for generating robust, structured templates for **xAI API agentic tool calls**. It uses Jinja2 to produce well-formed payloads that integrate messages, tools, and model configurations. Supports multiple templates for basic and advanced use cases, including additional parameters like temperature and max_tokens.
 
 Manager library validation, configured with input checks to prevent malformed payloads. When validation is bypassed, it can lead to runtime errors or invalid API calls.
 
@@ -39,6 +54,8 @@ pip install -e .
 from manager import Manager
 
 m = Manager()
+
+# Basic usage
 payload = m.render_chat_with_tools(
     "grok-beta",
     [{"role": "user", "content": "Hello"}],
@@ -48,10 +65,41 @@ payload = m.render_chat_with_tools(
 print(payload)
 ```
 
+#### Advanced Usage
+
+```python
+# Multiple messages
+messages = [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": "Search for AI news"},
+    {"role": "user", "content": "Summarize the results"}
+]
+
+# Using advanced template with additional parameters
+payload = m.render_chat_with_tools(
+    "grok-4-fast-reasoning",
+    messages,
+    [{"type": "web_search", "name": "web_search"}],
+    template_name="advanced.jinja",
+    temperature=0.7,
+    max_tokens=1000,
+    stream=True
+)
+
+print(payload)
+```
+
 ### CLI
 
 ```
+# Basic usage
 manager-cli --message "Search for AI news" --tools web_search code_execution
+
+# Multiple messages and system message
+manager-cli --system-message "You are a helpful assistant." --message "Hello" --message "How can I help?" --tools web_search
+
+# Using advanced template with parameters
+manager-cli --message "Generate a story" --template advanced.jinja --temperature 0.8 --max-tokens 500 --stream
 ```
 
 ## Common Misconfigurations
@@ -124,6 +172,14 @@ No known vulnerabilities.
 This project uses conventional commit standards.
 
 ### Setup
+
+Run the setup command to install the commit hook:
+
+```
+manager-cli --setup-hooks
+```
+
+Or manually:
 
 1. Copy the commit hook: `cp scripts/commit-msg .git/hooks/`
 2. Make it executable: `chmod +x .git/hooks/commit-msg`

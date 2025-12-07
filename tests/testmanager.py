@@ -91,3 +91,50 @@ def test_cli_missing_message():
         text=True,
     )
     assert result.returncode != 0  # Should fail due to missing --message
+
+
+def test_render_with_custom_template():
+    m = Manager()
+    result = m.render_chat_with_tools(
+        "test-model",
+        [{"role": "user", "content": "test"}],
+        [{"type": "test", "name": "test"}],
+        template_name="advanced.jinja",
+        temperature=0.5,
+        max_tokens=100,
+    )
+    assert '"model": "test-model"' in result
+    assert '"temperature": 0.5' in result
+    assert '"max_tokens": 100' in result
+
+
+def test_render_multiple_messages():
+    m = Manager()
+    messages = [
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Hello"},
+        {"role": "user", "content": "How are you?"},
+    ]
+    result = m.render_chat_with_tools(
+        "test-model", messages, [{"type": "web_search", "name": "web_search"}]
+    )
+    assert '"role": "system"' in result
+    assert '"content": "Hello"' in result
+    assert '"content": "How are you?"' in result
+
+
+def test_edge_cases():
+    m = Manager()
+    # Empty tools
+    result = m.render_chat_with_tools(
+        "model", [{"role": "user", "content": "test"}], []
+    )
+    assert '"tools": []' in result
+    # Large content (simulate)
+    long_content = "test " * 1000
+    result = m.render_chat_with_tools(
+        "model",
+        [{"role": "user", "content": long_content}],
+        [{"type": "test", "name": "test"}],
+    )
+    assert len(result) > 1000  # Should handle large payloads
