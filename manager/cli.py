@@ -9,13 +9,13 @@ from manager import Manager
 def setup_hooks():
     """Setup git hooks for conventional commits."""
 
-    hooks_dir = ".git/hooks"
-    if not os.path.exists(hooks_dir):
+    hooks_dir = Path(".git/hooks")
+    if not hooks_dir.exists():
         print("Git repository not found. Please run from the project root.")
         return
 
-    commit_msg_hook = os.path.join(hooks_dir, "commit-msg")
-    script_path = os.path.join(os.path.dirname(__file__), "..", "scripts", "commit-msg")
+    commit_msg_hook = hooks_dir / "commit-msg"
+    script_path = Path(__file__).resolve().parent.parent / "scripts" / "commit-msg"
 
     if os.path.exists(script_path):
         shutil.copy(script_path, commit_msg_hook)
