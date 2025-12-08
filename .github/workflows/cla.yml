@@ -27,7 +27,7 @@ jobs:
           path-to-document: 'https://github.com/bniladridas/manager/blob/main/CLA.md'
           remote-organization-name: 'bniladridas'
           remote-repository-name: 'manager'
-          branch: 'main'
+          branch: ${{ github.head_ref }}
           allowlist: user1,bot*
           path-to-signatures: ./signatures/cla.json
           use-dco-flag: false
