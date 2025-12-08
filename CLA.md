@@ -32,7 +32,7 @@ You are not expected to provide support for Your Contributions, except to the ex
 
 ## Submission on Behalf of Others
 
-Should You wish to submit work that is not Your original creation, You may submit it to the Manager project separately from any Contribution, identifying the complete details of its source and of any license or other restriction (including, but not limited to, related patents, trademarks, and license agreements) of which you are personally aware, and conspicuously marking the work as "Submitted on behalf of a third-party: harpertoken (https://github.com/harpertoken)".
+Should You wish to submit work that is not Your original creation, You may submit it to the Manager project separately from any Contribution, identifying the complete details of its source and of any license or other restriction (including, but not limited to, related patents, trademarks, and license agreements) of which you are personally aware, and conspicuously marking the work as "Submitted on behalf of a third-party: [Third-Party Name] ([GitHub Profile URL])".
 
 ## Agreement
 
