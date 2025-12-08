@@ -167,6 +167,12 @@ No known vulnerabilities.
 | -------- | ------- | ------------- | ---- |
 |          |         |               |      |
 
+## Contributing
+
+We welcome contributions! Please review our [Contributing Guidelines](CONTRIBUTING.md) and sign the [Contributor License Agreement](CLA.md) before submitting pull requests.
+
+For project architecture details, see [ARCHITECTURE.md](ARCHITECTURE.md).
+
 ## Conventional Commits
 
 This project uses conventional commit standards.
