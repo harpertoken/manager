@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: MIT
 
 import os
+from typing import Any, Dict, List
 
 from ._version import __version__
 
@@ -20,7 +21,7 @@ class Manager:
         template_dir = os.path.join(os.path.dirname(__file__), "templates")
         self.env = Environment(loader=FileSystemLoader(template_dir))
 
-    def _validate_messages(self, messages):
+    def _validate_messages(self, messages: List[Dict[str, str]]) -> None:
         if not isinstance(messages, list):
             raise ValueError("Messages must be a list")
         for msg in messages:
@@ -31,7 +32,7 @@ class Manager:
             if not isinstance(msg["role"], str) or not isinstance(msg["content"], str):
                 raise ValueError("'role' and 'content' must be strings")
 
-    def _validate_tools(self, tools):
+    def _validate_tools(self, tools: List[Dict[str, str]]) -> None:
         if not isinstance(tools, list):
             raise ValueError("Tools must be a list")
         for tool in tools:
@@ -43,8 +44,13 @@ class Manager:
                 raise ValueError("'type' and 'name' must be strings")
 
     def render_chat_with_tools(
-        self, model, messages, tools, template_name="chatwithtools.jinja", **kwargs
-    ):
+        self,
+        model: str,
+        messages: List[Dict[str, str]],
+        tools: List[Dict[str, str]],
+        template_name: str = "chatwithtools.jinja",
+        **kwargs: Any,
+    ) -> str:
         """Render a JSON payload for xAI API chat completions with tools.
 
         Args:

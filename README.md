@@ -1,13 +1,20 @@
-manager/__init__.py:45
+ manager/__init__.py:46
 
 ```python
-def render_chat_with_tools(self, model, messages, tools, template_name="chatwithtools.jinja", **kwargs):
+def render_chat_with_tools(
+    self,
+    model: str,
+    messages: List[Dict[str, str]],
+    tools: List[Dict[str, str]],
+    template_name: str = "chatwithtools.jinja",
+    **kwargs: Any
+) -> str:
     """Render a JSON payload for xAI API chat completions with tools.
 
     Args:
         model (str): The model name (e.g., "grok-beta").
-        messages (list): List of message dicts with 'role' and 'content'.
-        tools (list): List of tool dicts with 'type' and 'name'.
+        messages (List[Dict[str, str]]): List of message dicts with 'role' and 'content'.
+        tools (List[Dict[str, str]]): List of tool dicts with 'type' and 'name'.
         template_name (str): Name of the Jinja2 template to use.
         **kwargs: Additional parameters to pass to the template (e.g., temperature, max_tokens).
 
@@ -45,6 +52,41 @@ Users of this library can create custom template extensions or override defaults
 ```
 pip install -e .
 ```
+
+## API Reference
+
+### Manager Class
+
+#### `Manager()`
+Initializes the Manager with Jinja2 environment for template rendering.
+
+#### `render_chat_with_tools(model, messages, tools, template_name="chatwithtools.jinja", **kwargs)`
+Renders a JSON payload for xAI API chat completions with tools.
+
+- **Parameters:**
+  - `model` (str): The model name (e.g., "grok-beta").
+  - `messages` (List[Dict[str, str]]): List of message dicts with 'role' and 'content'.
+  - `tools` (List[Dict[str, str]]): List of tool dicts with 'type' and 'name'.
+  - `template_name` (str): Name of the Jinja2 template to use. Default: "chatwithtools.jinja".
+  - `**kwargs`: Additional parameters passed to the template (e.g., temperature, max_tokens).
+
+- **Returns:** str: The rendered JSON payload.
+
+- **Raises:** ValueError: If inputs do not meet validation requirements.
+
+#### CLI
+
+The `manager-cli` command provides a command-line interface for generating payloads.
+
+- `--model`: Model name (default: "grok-beta")
+- `--message`: User message (can be used multiple times)
+- `--system-message`: System message
+- `--tools`: List of tool names (default: ["web_search"])
+- `--template`: Template name (default: "chatwithtools.jinja")
+- `--temperature`: Temperature for generation
+- `--max-tokens`: Max tokens for generation
+- `--stream`: Enable streaming
+- `--setup-hooks`: Setup git hooks for conventional commits
 
 ## Usage
 
@@ -100,6 +142,42 @@ manager-cli --system-message "You are a helpful assistant." --message "Hello" --
 
 # Using advanced template with parameters
 manager-cli --message "Generate a story" --template advanced.jinja --temperature 0.8 --max-tokens 500 --stream
+
+# Setup git hooks
+manager-cli --setup-hooks
+```
+
+### Advanced Examples
+
+#### Custom Tools
+```python
+from manager import Manager
+
+m = Manager()
+
+tools = [
+    {"type": "web_search", "name": "web_search"},
+    {"type": "code_execution", "name": "code_execution"},
+    {"type": "file_read", "name": "file_read"}
+]
+
+payload = m.render_chat_with_tools(
+    "grok-4-fast-reasoning",
+    [{"role": "user", "content": "Analyze this codebase and suggest improvements"}],
+    tools
+)
+```
+
+#### Error Handling
+```python
+try:
+    payload = m.render_chat_with_tools(
+        "grok-beta",
+        [{"role": "user", "content": "Hello"}],  # Valid
+        [{"type": "web_search"}]  # Missing 'name'
+    )
+except ValueError as e:
+    print(f"Validation error: {e}")
 ```
 
 ## Common Misconfigurations

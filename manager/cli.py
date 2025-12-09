@@ -4,10 +4,12 @@ import argparse
 import os
 import shutil
 from pathlib import Path
+from typing import Dict, List
+
 from manager import Manager
 
 
-def setup_hooks():
+def setup_hooks() -> None:
     """Setup git hooks for conventional commits."""
 
     hooks_dir = Path(".git/hooks")
@@ -26,7 +28,7 @@ def setup_hooks():
         print("Hook script not found.")
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(
         description="Generate xAI API payloads using Manager"
     )
@@ -57,20 +59,20 @@ def main():
     else:
         if not args.message:
             parser.error("--message is required unless --setup-hooks is used")
-        m = Manager()
-        messages = []
+        m: Manager = Manager()
+        messages: List[Dict[str, str]] = []
         if args.system_message:
             messages.append({"role": "system", "content": args.system_message})
         for msg in args.message:
             messages.append({"role": "user", "content": msg})
-        tools = [{"type": t, "name": t} for t in args.tools]
+        tools: List[Dict[str, str]] = [{"type": t, "name": t} for t in args.tools]
         kwargs = {
             "temperature": args.temperature,
             "max_tokens": args.max_tokens,
             "stream": args.stream,
         }
         kwargs = {k: v for k, v in kwargs.items() if v}
-        payload = m.render_chat_with_tools(
+        payload: str = m.render_chat_with_tools(
             args.model, messages, tools, template_name=args.template, **kwargs
         )
         print(payload)
