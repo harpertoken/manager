@@ -60,15 +60,15 @@ pip install -e .
 #### `Manager()`
 Initializes the Manager with Jinja2 environment for template rendering.
 
-#### `render_chat_with_tools(model, messages, tools, template_name="chatwithtools.jinja", **kwargs)`
+#### `render_chat_with_tools(model: str, messages: List[Dict[str, str]], tools: List[Dict[str, str]], template_name: str = "chatwithtools.jinja", **kwargs: Any) -> str`
 Renders a JSON payload for xAI API chat completions with tools.
 
 - **Parameters:**
-  - `model` (str): The model name (e.g., "grok-beta").
-  - `messages` (List[Dict[str, str]]): List of message dicts with 'role' and 'content'.
-  - `tools` (List[Dict[str, str]]): List of tool dicts with 'type' and 'name'.
-  - `template_name` (str): Name of the Jinja2 template to use. Default: "chatwithtools.jinja".
-  - `**kwargs`: Additional parameters passed to the template (e.g., temperature, max_tokens).
+  - `model: str`: The model name (e.g., "grok-beta").
+  - `messages: List[Dict[str, str]]`: List of message dicts with 'role' and 'content'.
+  - `tools: List[Dict[str, str]]`: List of tool dicts with 'type' and 'name'.
+  - `template_name: str`: Name of the Jinja2 template to use. Default: "chatwithtools.jinja".
+  - `**kwargs: Any`: Additional parameters passed to the template (e.g., temperature, max_tokens).
 
 - **Returns:** str: The rendered JSON payload.
 
