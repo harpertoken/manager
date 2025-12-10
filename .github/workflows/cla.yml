@@ -84,11 +84,11 @@ jobs:
           git commit -m "docs(cla): update SIGNERS.md [skip ci]" || true
           git push "https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git" || true
 
-       - name: Update PR Status Check
-         uses: LouisBrunner/checks-action@v2
-         with:
-           token: ${{ secrets.GITHUB_TOKEN }}
-           sha: ${{ github.event.pull_request.head.sha }}
-           name: "CLA Check"
-           conclusion: success
-           status: completed
+      - name: Update PR Status Check
+        uses: LouisBrunner/checks-action@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          sha: ${{ github.event.pull_request.head.sha }}
+          name: "CLA Check"
+          conclusion: success
+          status: completed
