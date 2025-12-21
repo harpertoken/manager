@@ -19,6 +19,7 @@ repos:
       - id: ruff
         args: [--fix]
       - id: ruff-format
+        args: [--target-version, py38]
       - id: ruff
         name: ruff-check
         args: [--no-fix]

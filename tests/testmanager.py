@@ -149,12 +149,11 @@ def test_edge_cases():
 def test_setup_hooks():
     from manager.cli import setup_hooks
 
-    with (
-        patch("pathlib.Path.exists") as mock_exists,
-        patch("shutil.copy") as mock_copy,
-        patch("os.chmod") as mock_chmod,
-        patch("builtins.print") as mock_print,
-    ):
+    with patch("pathlib.Path.exists") as mock_exists, patch(
+        "shutil.copy"
+    ) as mock_copy, patch("os.chmod") as mock_chmod, patch(
+        "builtins.print"
+    ) as mock_print:
         # Test when .git/hooks exists and script exists
         mock_exists.return_value = True
         setup_hooks()
