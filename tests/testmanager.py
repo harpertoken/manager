@@ -170,12 +170,6 @@ def test_setup_hooks():
         )
 
 
-def test_cli_main_basic():
-    # Test basic CLI output via subprocess (already exists, but ensure it works)
-    # The existing test_cli_output covers this
-    pass
-
-
 def test_cli_with_system_message():
     result = subprocess.run(
         [
