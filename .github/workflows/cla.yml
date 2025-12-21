@@ -43,6 +43,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path-to-document: "CLA.md"
+          remote-repository-name: bniladridas/manager
           branch: cla-signatures
           path-to-signatures: "signatures/cla.json"
           use-dco-flag: false
