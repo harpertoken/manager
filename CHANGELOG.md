@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.3.1](https://github.com/bniladridas/manager/compare/manager-v0.3.0...manager-v0.3.1) (2025-12-21)
+
+
+### Bug Fixes
+
+* add remote repo name to cla action ([4277a25](https://github.com/bniladridas/manager/commit/4277a25231caa3e8c265d18b4f3a538f4ba72ccc))
+* remove allowlist from cla action ([33ec3bb](https://github.com/bniladridas/manager/commit/33ec3bbdd6055777eb253b26ffcafbfef11ac774))
+* remove duplicate test function ([9b1b693](https://github.com/bniladridas/manager/commit/9b1b6930922a3e67cec9f1ff733aa1b932e5157a))
+* remove duplicate test function ([395e4b3](https://github.com/bniladridas/manager/commit/395e4b3cc9b03cf044defe1c7e1c7e881db21266))
+* remove redundant test ([5955d7a](https://github.com/bniladridas/manager/commit/5955d7a7b58a8f9aed28bd0650e97fc4b4d15473))
+* set allowlist to empty string ([d192f51](https://github.com/bniladridas/manager/commit/d192f513234845b7566296dc81f133524079e172))
+* update cla action to v2.6.2 ([b3c81de](https://github.com/bniladridas/manager/commit/b3c81deb6e57e37f1b4cc4ea2c6d1ce3b99db38e))
+* use local path for cla document ([81deb33](https://github.com/bniladridas/manager/commit/81deb33b75d9c175e83c350faa721b139701193a))
+
+
+### Documentation
+
+* update CLA template for manual signing ([#18](https://github.com/bniladridas/manager/issues/18)) ([2d1eb25](https://github.com/bniladridas/manager/commit/2d1eb2501c0e680d423c2e5879c2d1e774513da9))
+
 ## [0.3.0](https://github.com/bniladridas/manager/compare/manager-v0.2.0...manager-v0.3.0) (2025-12-10)
 
 
