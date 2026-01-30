@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: MIT
 
 import os
+import warnings
 from typing import Any, Dict, List
 
 from ._version import __version__
@@ -143,8 +144,6 @@ class Manager:
         DEPRECATED: The /v1/messages endpoint is deprecated.
         Use render_chat_completions() for /v1/chat/completions endpoint.
         """
-        import warnings
-
         warnings.warn(
             "render_chat_with_tools is deprecated. Use render_chat_completions() instead.",
             DeprecationWarning,

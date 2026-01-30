@@ -1,31 +1,26 @@
- manager/__init__.py:133
+ manager/__init__.py:134
 
 ```python
 def render_chat_with_tools(
     self,
     model: str,
     messages: List[Dict[str, str]],
-    tools: List[Dict[str, Any]],  # Fixed: was List[Dict[str, str]]
-    template_name: str = "chat_completions.jinja",  # Fixed: was "chatwithtools.jinja"
-    **kwargs: Any
+    tools: List[Dict[str, Any]],
+    template_name: str = "chat_completions.jinja",
+    **kwargs: Any,
 ) -> str:
-    """Render a JSON payload for xAI API chat completions with tools.
+    """Legacy method - use render_chat_completions instead.
 
-    Args:
-        model (str): The model name (e.g., "grok-beta").
-        messages (List[Dict[str, str]]): List of message dicts with 'role' and 'content'.
-        tools (List[Dict[str, str]]): List of tool dicts with 'type' and 'name'.
-        template_name (str): Name of the Jinja2 template to use.
-        **kwargs: Additional parameters to pass to the template (e.g., temperature, max_tokens).
-
-    Returns:
-        str: The rendered JSON payload.
-
-    Raises:
-        ValueError: If inputs do not meet validation requirements.
+    DEPRECATED: The /v1/messages endpoint is deprecated.
+    Use render_chat_completions() for /v1/chat/completions endpoint.
     """
+    warnings.warn(
+        "render_chat_with_tools is deprecated. Use render_chat_completions() instead.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
     self._validate_messages(messages)
-    self._validate_tools(tools)
+    self._validate_tools_legacy(tools)
     if not isinstance(model, str):
         raise ValueError("Model must be a string")
     template = self.env.get_template(template_name)
