@@ -1,5 +1,42 @@
 # Changelog
 
+## [0.4.0](https://github.com/harpertoken/manager/compare/manager-v0.3.1...manager-v0.4.0) (2026-01-30)
+
+
+### Features
+
+* add mit spdx license identifiers to yaml files ([0994604](https://github.com/harpertoken/manager/commit/099460432a57b48cce4c414fbe31a8af7fedd30a))
+* add workflow to lock merged prs and delete branches ([104898d](https://github.com/harpertoken/manager/commit/104898d00133f831804cca2c3a3fcbed48e86755))
+* add workflow to lock merged prs and delete branches ([a83d9c2](https://github.com/harpertoken/manager/commit/a83d9c250a5255a1a8102055e697c752dc9bde22))
+* migrate to new xai api endpoints ([#21](https://github.com/harpertoken/manager/issues/21)) ([a0454b9](https://github.com/harpertoken/manager/commit/a0454b9b3c051ef8124d6b0b44dc7dcfa7eb2d74))
+* restore CLA bot for PR locking ([#19](https://github.com/harpertoken/manager/issues/19)) ([d61af3a](https://github.com/harpertoken/manager/commit/d61af3a0d5cf9398f0c9c4d961ceb2d212127b1a))
+
+
+### Bug Fixes
+
+* add token for cla workflow ([440e027](https://github.com/harpertoken/manager/commit/440e0275215c4b6ff6fb008ed8e12646b307cb8f))
+* correct cla action version ([1b0f434](https://github.com/harpertoken/manager/commit/1b0f43437f24476df37276f8b91d37d613e0316d))
+* correct spdx to mit and update license year ([773d09b](https://github.com/harpertoken/manager/commit/773d09b1696eab5bf5ccb32e22602bde1d5a53c5))
+* disable cla for critical migration ([b227d9a](https://github.com/harpertoken/manager/commit/b227d9a9314eccedd3fa9a8640ac3a0b56f2415d))
+* re-enable cla with newer version ([ada5068](https://github.com/harpertoken/manager/commit/ada5068cf40a67252c45aa24a51a6c8d19b3f307))
+* resolve yamllint issues ([5715017](https://github.com/harpertoken/manager/commit/5715017c2c1b23292d77ec182646e1ce98e3ca13))
+* temporarily disable cla workflow ([20523b7](https://github.com/harpertoken/manager/commit/20523b77ac77b0994229e73cb8b1c4eda8c2e5ca))
+* update cla repository name ([58daf3d](https://github.com/harpertoken/manager/commit/58daf3db0636ccdf8f96ad264c3c601e74f85c1b))
+* update contributor-assistant to v2 ([cfb6368](https://github.com/harpertoken/manager/commit/cfb636855356d940a42f6ab1e425be489839fee0))
+* use correct token for cla workflow ([b386fb4](https://github.com/harpertoken/manager/commit/b386fb4b8127c9e76f0d2d0295daa4171e25b6c0))
+
+
+### Documentation
+
+* fix readme code snippet documentation errors ([#25](https://github.com/harpertoken/manager/issues/25)) ([f2d956c](https://github.com/harpertoken/manager/commit/f2d956c0c0a00b398b726058001258700523fb40))
+* replace `readme snippet` with actual implementation ([#26](https://github.com/harpertoken/manager/issues/26)) ([227d68d](https://github.com/harpertoken/manager/commit/227d68ddcdee1e8c7b557087e6c496b2e7397777))
+
+
+### Continuous Integration
+
+* fix cla action version to v2.6.1 ([#28](https://github.com/harpertoken/manager/issues/28)) ([d6eca7c](https://github.com/harpertoken/manager/commit/d6eca7cf4dac0941e737bf6d461dd1e797b8040e))
+* simplify cla workflow to main branch ([#27](https://github.com/harpertoken/manager/issues/27)) ([02fa8c4](https://github.com/harpertoken/manager/commit/02fa8c44b416f135a33473a173ae5f79a9a3b8aa))
+
 ## [0.3.1](https://github.com/bniladridas/manager/compare/manager-v0.3.0...manager-v0.3.1) (2025-12-21)
 
 
