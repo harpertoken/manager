@@ -60,18 +60,24 @@ jobs:
           done
 
       - name: Commit signature updates
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
         run: |
           if [ -n "$(git status --porcelain signatures)" ]; then
             git config user.name "cla-bot"
             git config user.email "cla-bot@users.noreply.github.com"
             git add signatures
             git commit -m "chore(cla): update CLA signatures [skip ci]"
-            git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+            git push "https://x-access-token:$GITHUB_TOKEN@github.com/$REPO.git"
           else
             echo "No signature updates."
           fi
 
       - name: Regenerate SIGNERS.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
         run: |
           echo "# Contributors Who Signed the CLA" > SIGNERS.md
           echo "" >> SIGNERS.md
@@ -81,7 +87,7 @@ jobs:
           done
           git add SIGNERS.md
           git commit -m "docs(cla): update SIGNERS.md [skip ci]" || true
-          git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" || true
+          git push "https://x-access-token:$GITHUB_TOKEN@github.com/$REPO.git" || true
 
       - name: Update PR Status Check
         uses: LouisBrunner/checks-action@v2
