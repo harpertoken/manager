@@ -1,0 +1,8 @@
+{
+  "input": {{ input | tojson }}{% if tools is defined %},
+  "tools": {{ tools | tojson }}{% endif %}{% if temperature is defined %},
+  "temperature": {{ temperature }}{% endif %}{% if max_tokens is defined %},
+  "max_tokens": {{ max_tokens }}{% endif %}{% if stream is defined %},
+  "stream": {{ stream | lower }}{% endif %}{% if tool_choice is defined %},
+  "tool_choice": {{ tool_choice | tojson }}{% endif %}
+}

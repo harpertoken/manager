@@ -32,7 +32,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description="Generate xAI API payloads using Manager"
     )
-    parser.add_argument("--model", default="grok-beta", help="Model name")
+    parser.add_argument("--model", default="grok-4", help="Model name")
     parser.add_argument(
         "--message", action="append", help="User message (can be used multiple times)"
     )
@@ -41,7 +41,13 @@ def main() -> None:
         "--tools", nargs="+", default=["web_search"], help="List of tool names"
     )
     parser.add_argument(
-        "--template", default="chatwithtools.jinja", help="Template name"
+        "--template", default="chat_completions.jinja", help="Template name"
+    )
+    parser.add_argument(
+        "--endpoint",
+        choices=["chat_completions", "responses"],
+        default="chat_completions",
+        help="API endpoint to target",
     )
     parser.add_argument("--temperature", type=float, help="Temperature for generation")
     parser.add_argument("--max-tokens", type=int, help="Max tokens for generation")
@@ -65,16 +71,35 @@ def main() -> None:
             messages.append({"role": "system", "content": args.system_message})
         for msg in args.message:
             messages.append({"role": "user", "content": msg})
-        tools: List[Dict[str, str]] = [{"type": t, "name": t} for t in args.tools]
+
+        # Convert tools to new format
+        tools = []
+        for tool_name in args.tools:
+            tools.append(
+                {
+                    "type": "function",
+                    "function": {
+                        "name": tool_name,
+                        "description": f"Tool for {tool_name}",
+                    },
+                }
+            )
+
         kwargs = {
             "temperature": args.temperature,
             "max_tokens": args.max_tokens,
             "stream": args.stream,
         }
         kwargs = {k: v for k, v in kwargs.items() if v}
-        payload: str = m.render_chat_with_tools(
-            args.model, messages, tools, template_name=args.template, **kwargs
-        )
+
+        if args.endpoint == "responses":
+            payload: str = m.render_responses(
+                messages, tools, template_name="responses.jinja", **kwargs
+            )
+        else:
+            payload: str = m.render_chat_completions(
+                args.model, messages, tools, template_name=args.template, **kwargs
+            )
         print(payload)
 
 

@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: MIT
 
 import pytest
+import warnings
 from manager import Manager
 import subprocess
 import sys
@@ -8,62 +9,91 @@ from unittest.mock import patch
 from pathlib import Path
 
 
-def test_render_chat_with_tools():
+def test_render_chat_completions():
     m = Manager()
-    result = m.render_chat_with_tools(
-        "test-model",
+    result = m.render_chat_completions(
+        "grok-4",
         [{"role": "user", "content": "test"}],
-        [{"type": "test", "name": "test"}],
+        [{"type": "function", "function": {"name": "test_tool"}}],
     )
-    assert '"model": "test-model"' in result
+    assert '"model": "grok-4"' in result
     assert '"content": "test"' in result
+    assert '"tools"' in result
+
+
+def test_render_responses():
+    m = Manager()
+    result = m.render_responses(
+        [{"role": "user", "content": "test"}],
+        [{"type": "function", "function": {"name": "test_tool"}}],
+    )
+    assert '"input"' in result
+    assert '"content": "test"' in result
+    assert '"tools"' in result
+
+
+def test_render_chat_with_tools_deprecated():
+    m = Manager()
+    with warnings.catch_warnings(record=True) as w:
+        warnings.simplefilter("always")
+        result = m.render_chat_with_tools(
+            "grok-4",
+            [{"role": "user", "content": "test"}],
+            [{"type": "function", "function": {"name": "test_tool"}}],
+        )
+        assert len(w) == 1
+        assert issubclass(w[0].category, DeprecationWarning)
+        assert "deprecated" in str(w[0].message)
+    assert '"model": "grok-4"' in result
 
 
 def test_validate_messages_invalid():
     m = Manager()
     with pytest.raises(ValueError, match="Messages must be a list"):
-        m.render_chat_with_tools("model", "not a list", [])  # type: ignore
+        m.render_chat_completions("model", "not a list", [])  # type: ignore
     with pytest.raises(ValueError, match="Each message must be a dict"):
-        m.render_chat_with_tools("model", ["not a dict"], [])  # type: ignore
+        m.render_chat_completions("model", ["not a dict"], [])  # type: ignore
     with pytest.raises(ValueError, match="Each message must have 'role' and 'content'"):
-        m.render_chat_with_tools("model", [{"role": "user"}], [])
+        m.render_chat_completions("model", [{"role": "user"}], [])
     with pytest.raises(ValueError, match="'role' and 'content' must be strings"):
-        m.render_chat_with_tools("model", [{"role": 123, "content": "test"}], [])  # type: ignore
+        m.render_chat_completions("model", [{"role": 123, "content": "test"}], [])  # type: ignore
 
 
 def test_validate_tools_invalid():
     m = Manager()
     with pytest.raises(ValueError, match="Tools must be a list"):
-        m.render_chat_with_tools(
+        m.render_chat_completions(
             "model",
             [{"role": "user", "content": "test"}],
             "not a list",  # type: ignore
         )
     with pytest.raises(ValueError, match="Each tool must be a dict"):
-        m.render_chat_with_tools(
+        m.render_chat_completions(
             "model",
             [{"role": "user", "content": "test"}],
             ["not a dict"],  # type: ignore
         )
-    with pytest.raises(ValueError, match="Each tool must have 'type' and 'name'"):
-        m.render_chat_with_tools(
-            "model", [{"role": "user", "content": "test"}], [{"type": "test"}]
-        )
-    with pytest.raises(ValueError, match="'type' and 'name' must be strings"):
-        m.render_chat_with_tools(
+    with pytest.raises(ValueError, match="Unsupported tool type"):
+        m.render_chat_completions(
             "model",
             [{"role": "user", "content": "test"}],
-            [{"type": 123, "name": "test"}],  # type: ignore
+            [{"type": "web_search", "name": "test"}],
+        )
+    with pytest.raises(ValueError, match="Function must have 'name' key"):
+        m.render_chat_completions(
+            "model",
+            [{"role": "user", "content": "test"}],
+            [{"type": "function", "function": {}}],
         )
 
 
 def test_validate_model_invalid():
     m = Manager()
     with pytest.raises(ValueError, match="Model must be a string"):
-        m.render_chat_with_tools(
+        m.render_chat_completions(
             123,  # type: ignore
             [{"role": "user", "content": "test"}],
-            [{"type": "test", "name": "test"}],
+            [{"type": "function", "function": {"name": "test"}}],
         )
 
 
@@ -80,9 +110,9 @@ def test_cli_output():
     )
     assert result.returncode == 0
     output = result.stdout.strip()
-    assert '"model": "grok-beta"' in output
+    assert '"model": "grok-4"' in output
     assert '"content": "Test message"' in output
-    assert '"type": "web_search"' in output
+    assert '"type": "function"' in output
 
 
 def test_cli_missing_message():
