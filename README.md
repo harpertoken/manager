@@ -1,4 +1,4 @@
- manager/__init__.py:133
+ manager/__init__.py:134
 
 ```python
 def render_chat_with_tools(
@@ -14,8 +14,6 @@ def render_chat_with_tools(
     DEPRECATED: The /v1/messages endpoint is deprecated.
     Use render_chat_completions() for /v1/chat/completions endpoint.
     """
-    import warnings
-
     warnings.warn(
         "render_chat_with_tools is deprecated. Use render_chat_completions() instead.",
         DeprecationWarning,
