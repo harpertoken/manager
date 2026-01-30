@@ -7,7 +7,7 @@ on:
     types: [created]
   pull_request_target:
     types: [opened, closed, synchronize]
-    # Temporarily disabled - CLA token configuration needed
+    # Temporarily disabled - signature exists but action failing
     if: false
 
 jobs:
