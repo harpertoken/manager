@@ -47,9 +47,10 @@ class Manager:
                 func = tool["function"]
                 if "name" not in func:
                     raise ValueError("Function must have 'name' key")
-            # Legacy format support
-            elif "name" not in tool:
-                raise ValueError("Each tool must have 'name' key")
+            else:
+                raise ValueError(
+                    f"Unsupported tool type: {tool['type']}. Only 'function' type is supported."
+                )
 
     def render_chat_completions(
         self,
@@ -109,6 +110,25 @@ class Manager:
         template = self.env.get_template(template_name)
         return template.render(input=input_messages, tools=tools, **kwargs)
 
+    def _validate_tools_legacy(self, tools: List[Dict[str, Any]]) -> None:
+        """Legacy validation for backward compatibility."""
+        if not isinstance(tools, list):
+            raise ValueError("Tools must be a list")
+        for tool in tools:
+            if not isinstance(tool, dict):
+                raise ValueError("Each tool must be a dict")
+            if "type" not in tool:
+                raise ValueError("Each tool must have 'type' key")
+            if tool["type"] == "function":
+                if "function" not in tool:
+                    raise ValueError("Function tools must have 'function' key")
+                func = tool["function"]
+                if "name" not in func:
+                    raise ValueError("Function must have 'name' key")
+            # Legacy format support
+            elif "name" not in tool:
+                raise ValueError("Each tool must have 'name' key")
+
     # Legacy method for backward compatibility
     def render_chat_with_tools(
         self,
@@ -130,6 +150,9 @@ class Manager:
             DeprecationWarning,
             stacklevel=2,
         )
-        return self.render_chat_completions(
-            model, messages, tools, template_name, **kwargs
-        )
+        self._validate_messages(messages)
+        self._validate_tools_legacy(tools)
+        if not isinstance(model, str):
+            raise ValueError("Model must be a string")
+        template = self.env.get_template(template_name)
+        return template.render(model=model, messages=messages, tools=tools, **kwargs)

@@ -73,9 +73,11 @@ def test_validate_tools_invalid():
             [{"role": "user", "content": "test"}],
             ["not a dict"],  # type: ignore
         )
-    with pytest.raises(ValueError, match="Each tool must have 'type' key"):
+    with pytest.raises(ValueError, match="Unsupported tool type"):
         m.render_chat_completions(
-            "model", [{"role": "user", "content": "test"}], [{"name": "test"}]
+            "model",
+            [{"role": "user", "content": "test"}],
+            [{"type": "web_search", "name": "test"}],
         )
     with pytest.raises(ValueError, match="Function must have 'name' key"):
         m.render_chat_completions(
