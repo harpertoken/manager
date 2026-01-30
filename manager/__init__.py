@@ -108,6 +108,7 @@ class Manager:
             self._validate_tools(tools)
         template = self.env.get_template(template_name)
         return template.render(input=input_messages, tools=tools, **kwargs)
+
     # Legacy method for backward compatibility
     def render_chat_with_tools(
         self,
@@ -118,14 +119,17 @@ class Manager:
         **kwargs: Any,
     ) -> str:
         """Legacy method - use render_chat_completions instead.
-        
-        DEPRECATED: The /v1/messages endpoint is deprecated. 
+
+        DEPRECATED: The /v1/messages endpoint is deprecated.
         Use render_chat_completions() for /v1/chat/completions endpoint.
         """
         import warnings
+
         warnings.warn(
             "render_chat_with_tools is deprecated. Use render_chat_completions() instead.",
             DeprecationWarning,
-            stacklevel=2
+            stacklevel=2,
         )
-        return self.render_chat_completions(model, messages, tools, template_name, **kwargs)
+        return self.render_chat_completions(
+            model, messages, tools, template_name, **kwargs
+        )

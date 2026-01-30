@@ -44,10 +44,10 @@ def main() -> None:
         "--template", default="chat_completions.jinja", help="Template name"
     )
     parser.add_argument(
-        "--endpoint", 
-        choices=["chat_completions", "responses"], 
+        "--endpoint",
+        choices=["chat_completions", "responses"],
         default="chat_completions",
-        help="API endpoint to target"
+        help="API endpoint to target",
     )
     parser.add_argument("--temperature", type=float, help="Temperature for generation")
     parser.add_argument("--max-tokens", type=int, help="Max tokens for generation")
@@ -71,25 +71,27 @@ def main() -> None:
             messages.append({"role": "system", "content": args.system_message})
         for msg in args.message:
             messages.append({"role": "user", "content": msg})
-        
+
         # Convert tools to new format
         tools = []
         for tool_name in args.tools:
-            tools.append({
-                "type": "function",
-                "function": {
-                    "name": tool_name,
-                    "description": f"Tool for {tool_name}"
+            tools.append(
+                {
+                    "type": "function",
+                    "function": {
+                        "name": tool_name,
+                        "description": f"Tool for {tool_name}",
+                    },
                 }
-            })
-        
+            )
+
         kwargs = {
             "temperature": args.temperature,
             "max_tokens": args.max_tokens,
             "stream": args.stream,
         }
         kwargs = {k: v for k, v in kwargs.items() if v}
-        
+
         if args.endpoint == "responses":
             payload: str = m.render_responses(
                 messages, tools, template_name="responses.jinja", **kwargs

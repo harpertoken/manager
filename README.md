@@ -32,7 +32,7 @@ def render_chat_with_tools(
     return template.render(model=model, messages=messages, tools=tools, **kwargs)
 ```
 
-`manager` is a Python library and CLI tool for generating robust, structured templates for **xAI API agentic tool calls**. It uses Jinja2 to produce well-formed payloads that integrate messages, tools, and model configurations. 
+`manager` is a Python library and CLI tool for generating robust, structured templates for **xAI API agentic tool calls**. It uses Jinja2 to produce well-formed payloads that integrate messages, tools, and model configurations.
 
 **🚨 IMPORTANT**: The xAI `/v1/messages` endpoint is deprecated and will be removed on February 20, 2026. This library now supports the new `/v1/chat/completions` and `/v1/responses` endpoints. See [MIGRATION.md](MIGRATION.md) for upgrade instructions.
 
