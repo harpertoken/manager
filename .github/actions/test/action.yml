@@ -1,3 +1,4 @@
+---
 name: 'Test'
 description: 'Run tests for the project'
 inputs:
