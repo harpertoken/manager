@@ -1,12 +1,12 @@
- manager/__init__.py:46
+ manager/__init__.py:133
 
 ```python
 def render_chat_with_tools(
     self,
     model: str,
     messages: List[Dict[str, str]],
-    tools: List[Dict[str, str]],
-    template_name: str = "chatwithtools.jinja",
+    tools: List[Dict[str, Any]],  # Fixed: was List[Dict[str, str]]
+    template_name: str = "chat_completions.jinja",  # Fixed: was "chatwithtools.jinja"
     **kwargs: Any
 ) -> str:
     """Render a JSON payload for xAI API chat completions with tools.
